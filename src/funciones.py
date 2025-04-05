@@ -193,17 +193,6 @@ def imprimir_tabla_ronda(datos_jugadores):
     
     print(56*"-")
     print()
-   
-"""def acumular_resultados(lista_de_tuplas):
-    acumulado = []
-    datos_jugador = ('Jugador', {'kills': 0,'assists': 0,'deaths': 0,'MVPs': 0,'Puntaje': 0})
-
-    for n in range(len(lista_de_tuplas)):
-        lista_de_tuplas[n]
-        
-    
-
-    return acumulado"""
     
 def acumular_rondas(rondas_ordenadas):
     acumulador = {}
@@ -250,7 +239,6 @@ def imprimir_todo(datos_jugadores):
     
     print("Ranking Final")
     # ordenamos por puntaje para imprimirlo
-    #orden_final = sorted(acumulados.items(), key=lambda x: x[1]['Puntaje'], reverse=True)
     imprimir_tabla_ronda(acumulados)
     
     
