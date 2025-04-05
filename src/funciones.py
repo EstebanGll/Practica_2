@@ -146,9 +146,112 @@ def limpieza_lista(lista):
         lista = eliminar_repetidos(lista)
         return lista
 
+###10. procesar datos de un grupo de jugadores por rondas hasta el ranking final
+###representar
+
+def ordenar_datos(datos_jugador):
+    #Primero ordenamos por puntaje cada kill da 3 puntos, cada asistencia da 1, y la muerte quita 1
+    datos_tabla = {}
+    #.items da los pares clave-valor
+    for jugador, stats in datos_jugador.items():
+        kills = stats['kills']
+        assists = stats['assists']
+        deaths = 1 if stats['deaths'] else 0
+
+        puntaje = kills * 3 + assists - deaths
+
+        #devuelve los datos del jugador con el puntaje
+        datos_tabla[jugador] = {
+            'kills': kills,
+            'assists': assists,
+            'deaths': deaths,
+            'MVPs': 0,
+            'Puntaje': puntaje
+        }
+    # Ordenar por puntaje descendente 
+    # sorted(datos, key = dato en el que se basa para ordenar, reverse = True >- de mayor a menor)
+    # x[1]["Puntaje"] accede al puntaje del jugador, x es la tupla clave - valor 
+    # esto genera una tupla de valores
+    tabla_ordenada = sorted(datos_tabla.items(), key=lambda x: x[1]['Puntaje'], reverse=True)
+        
+    # accedemos al primer jugador, el con mayor puntaje
+    # [0] primer jugador y [1] sus stats
+    tabla_ordenada[0][1]["MVPs"] = 1
+    return tabla_ordenada
+
+def imprimir_tabla_ronda(datos_jugadores):
     
-                
-                
+    # Formato impresion tabla
+    
+    # :^8 = ^ alineacion central y un ancho de 8 espacios 
+    print(f"{"Jugador":^8} {"Kills":^8} {"Asistencias":^8} {"Muertes":^8} {"MVPs":^8} {"Puntos":^8}")
+    
+    print(56*"-")
+    
+    for jugador, stats in datos_jugadores:
+        print(f"{jugador:^8} {stats['kills']:^8} {stats['assists']:^8} {stats['deaths']:^8} {stats['MVPs']:^8} {stats['Puntaje']:^8}")
+    
+    print(56*"-")
+    print()
+   
+"""def acumular_resultados(lista_de_tuplas):
+    acumulado = []
+    datos_jugador = ('Jugador', {'kills': 0,'assists': 0,'deaths': 0,'MVPs': 0,'Puntaje': 0})
+
+    for n in range(len(lista_de_tuplas)):
+        lista_de_tuplas[n]
+        
+    
+
+    return acumulado"""
+    
+def acumular_rondas(rondas_ordenadas):
+    acumulador = {}
+
+    for ronda in rondas_ordenadas:
+        for jugador, stats in ronda:
+            if jugador not in acumulador:
+                acumulador[jugador] = {
+                    'kills': 0,
+                    'assists': 0,
+                    'deaths': 0,
+                    'MVPs': 0,
+                    'Puntaje': 0
+                }
+
+            # Sumamos cada estadística
+            for clave in stats:
+                acumulador[jugador][clave] += stats[clave]
+
+    # Devolvemos los datos acumulados en una lista de tuplas ordenadas por Puntaje descendente
+    return sorted(acumulador.items(), key=lambda x: x[1]['Puntaje'], reverse=True)
+
+    
+
+   
+def imprimir_todo(datos_jugadores):
+    
+    # generamos la lista donde estaran las tablas ordenadas por estadisticas
+    lista_ordenada = []  
+    
+    # imprimir datos por ronda
+    for n in range(len(datos_jugadores)):
+        print(f"Ranking ronda :{n + 1}")
+        tabla_ordenada = ordenar_datos(datos_jugadores[n])
+        
+        # cargamos a la nuevo lista con los datos ordenados
+        lista_ordenada.append(tabla_ordenada)
+        imprimir_tabla_ronda(tabla_ordenada)
+      
+    # imprimir datos ronda final
+    
+    # acumulamos los datos de todas las rondas ya con puntaje
+    acumulados = acumular_rondas(lista_ordenada)
+    
+    print("Ranking Final")
+    # ordenamos por puntaje para imprimirlo
+    #orden_final = sorted(acumulados.items(), key=lambda x: x[1]['Puntaje'], reverse=True)
+    imprimir_tabla_ronda(acumulados)
     
     
     
